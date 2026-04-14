@@ -1296,9 +1296,107 @@ a.menu-card:focus-visible {
   }
 }
 
-@media (min-width: 720px) {
+@media (min-width: 720px) and (max-width: 900px) {
   :root {
     --content-max: 50rem;
+  }
+}
+
+/* Desktop — leitura e respiro (≥901px); mobile ≤639px inalterado no bloco acima */
+@media (min-width: 901px) {
+  :root {
+    --content-max: 56rem;
+    --page-pad: clamp(1.5rem, 2.5vw, 2.75rem);
+  }
+
+  html {
+    scroll-padding-top: 5.25rem;
+  }
+
+  .topbar__inner {
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    max-width: 80rem;
+  }
+
+  .topbar__link {
+    font-size: 0.875rem;
+    padding: 0.48rem 0.95rem;
+  }
+
+  .topbar__cta,
+  .topbar__secondary {
+    font-size: 0.875rem;
+  }
+
+  .hero__visual,
+  .hero__content {
+    min-height: clamp(24rem, 76vh, 56rem);
+  }
+
+  .hero__content {
+    padding-top: clamp(4.5rem, 10vw, 6rem);
+    padding-bottom: clamp(2.25rem, 4vw, 3.75rem);
+    max-width: 80rem;
+  }
+
+  .hero__content > * {
+    max-width: min(42rem, 48%);
+  }
+
+  .hero__title {
+    font-size: clamp(2.65rem, 3.8vw, 3.5rem);
+  }
+
+  .hero__lede {
+    font-size: 1.0625rem;
+    max-width: 42ch;
+  }
+
+  .main-stack {
+    padding-top: clamp(2.35rem, 3.2vw, 3rem);
+    padding-bottom: clamp(3rem, 4.5vw, 4.5rem);
+    border-radius: calc(var(--radius-lg) + 2px) calc(var(--radius-lg) + 2px) 0 0;
+  }
+
+  .menu-category {
+    scroll-margin-top: 5.5rem;
+    padding-top: clamp(1.85rem, 2.5vw, 2.35rem);
+    padding-bottom: clamp(2.35rem, 3.5vw, 3.25rem);
+  }
+
+  .headline-lg {
+    font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+  }
+
+  .category-intro {
+    max-width: 62ch;
+    font-size: 1rem;
+  }
+
+  .section-media {
+    gap: 1.2rem;
+    margin-bottom: clamp(2rem, 3vw, 2.75rem);
+  }
+
+  .menu-card__inner {
+    padding: clamp(1.2rem, 2vw, 1.55rem) clamp(1.15rem, 2vw, 1.5rem) clamp(1.35rem, 2.2vw, 1.65rem);
+    padding-left: clamp(1.05rem, 1.8vw, 1.35rem);
+  }
+
+  .includes-list,
+  .desc {
+    max-width: 62ch;
+    font-size: 0.96875rem;
+  }
+
+  .site-footer {
+    padding-top: clamp(2.5rem, 4vw, 3.5rem);
+    padding-bottom: clamp(3rem, 5vw, 4.25rem);
+  }
+
+  .site-footer p {
+    max-width: 48ch;
   }
 }
 
