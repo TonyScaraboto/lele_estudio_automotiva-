@@ -78,7 +78,7 @@ if (categories.length && chips.length) {
     if (max <= 4) return;
     var step = cardStep(strip);
     if (step < 8) return;
-    var next = strip.scrollLeft + step * 0.98;
+    var next = strip.scrollLeft + step;
     var behavior = reduce.matches ? "auto" : "smooth";
     if (next >= max - 2) {
       strip.scrollTo({ left: 0, behavior: behavior });
@@ -90,7 +90,7 @@ if (categories.length && chips.length) {
   function scrollPrev(strip) {
     var step = cardStep(strip);
     if (step < 8) return;
-    var prev = Math.max(0, strip.scrollLeft - step * 0.98);
+    var prev = Math.max(0, strip.scrollLeft - step);
     strip.scrollTo({ left: prev, behavior: reduce.matches ? "auto" : "smooth" });
   }
 

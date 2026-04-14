@@ -582,46 +582,77 @@ body {
     outline-offset: 2px;
   }
 
-  /* Cartões tipo poster (vertical), ~3 visíveis + peek */
+  /* Um slide de cada vez: cada figura ocupa 100% da faixa rolável */
   .section-media--quad .section-media__item {
-    flex: 0 0 auto;
-    width: clamp(10.5rem, 19vw, 14.5rem);
-    min-width: clamp(10.5rem, 19vw, 14.5rem);
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    gap: 0;
     scroll-snap-align: start;
     scroll-snap-stop: always;
     position: relative;
     z-index: 1;
-    transition: transform 0.42s var(--ease-out-soft), z-index 0s linear 0.42s;
+    overflow: hidden;
+    border-radius: calc(var(--radius-lg) + 4px);
+    transition: box-shadow 0.38s var(--ease-out-soft);
   }
 
   .section-media--quad .section-media__item:hover {
-    z-index: 6;
-    transition: transform 0.42s var(--ease-out-soft), z-index 0s;
-    transform: scale(1.07);
+    z-index: 2;
+    transform: none;
   }
 
   .section-media--quad .section-media__img {
-    aspect-ratio: 3 / 4;
-    border-radius: calc(var(--radius-lg) + 2px);
-    transition: box-shadow 0.38s var(--ease-out-soft), outline-color 0.3s ease, transform 0.38s var(--ease-out-soft);
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: min(70vh, 40rem);
+    height: auto;
+    object-fit: cover;
+    border-radius: 0;
+    transition: transform 0.55s var(--ease-out-soft), box-shadow 0.38s var(--ease-out-soft);
   }
 
   .section-media--quad .section-media__item:hover .section-media__img {
-    transform: none;
-    box-shadow:
-      0 32px 70px rgba(0, 0, 0, 0.58),
-      0 0 0 2px rgba(252, 165, 165, 0.5),
-      0 0 56px rgba(240, 68, 56, 0.28);
-    outline: 1px solid rgba(252, 165, 165, 0.55);
+    transform: scale(1.02);
+    box-shadow: none;
+    outline: none;
   }
-}
 
-@supports (width: 1cqw) {
-  @media (min-width: 960px) {
-    .section-media--quad .section-media__item {
-      width: clamp(10.5rem, 24cqw, 15rem);
-      min-width: clamp(10.5rem, 24cqw, 15rem);
-    }
+  /* Legenda neon sobre a foto (só desktop quad) */
+  .section-media--quad .section-media__cap {
+    position: absolute;
+    left: 50%;
+    bottom: 1.15rem;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 2.5rem);
+    margin: 0;
+    padding: 0.5rem 1.2rem;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    color: #fffefb;
+    background: rgba(6, 6, 10, 0.5);
+    border: 1px solid rgba(252, 165, 165, 0.45);
+    border-radius: 999px;
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    text-shadow:
+      0 0 8px rgba(255, 255, 255, 0.55),
+      0 0 18px rgba(252, 165, 165, 0.95),
+      0 0 32px rgba(240, 68, 56, 0.75),
+      0 0 48px rgba(220, 38, 38, 0.4);
+    box-shadow:
+      0 0 22px rgba(240, 68, 56, 0.35),
+      0 0 40px rgba(240, 68, 56, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    z-index: 2;
   }
 }
 
@@ -1673,7 +1704,13 @@ a.menu-card:focus-visible {
     margin-bottom: 1.15rem;
     font-size: 0.6875rem;
     letter-spacing: 0.14em;
-    color: rgba(252, 165, 165, 0.82);
+    text-transform: uppercase;
+    color: #fff5f4;
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.45),
+      0 0 14px rgba(252, 165, 165, 0.95),
+      0 0 26px rgba(240, 68, 56, 0.85),
+      0 0 40px rgba(220, 38, 38, 0.5);
   }
 
   .family-title::after {
@@ -1681,7 +1718,8 @@ a.menu-card:focus-visible {
     flex: 1;
     height: 1px;
     min-width: 2.5rem;
-    background: linear-gradient(90deg, rgba(252, 165, 165, 0.32), transparent 92%);
+    background: linear-gradient(90deg, rgba(252, 113, 113, 0.95), rgba(240, 68, 56, 0.5) 42%, transparent 100%);
+    box-shadow: 0 0 10px rgba(240, 68, 56, 0.65), 0 0 22px rgba(220, 38, 38, 0.35);
   }
 
   .family-intro {
@@ -1786,6 +1824,10 @@ a.menu-card:focus-visible {
 @media (min-width: 960px) and (prefers-reduced-motion: reduce) {
   .section-media--quad .section-media__item,
   .section-media--quad .section-media__item:hover {
+    transform: none;
+  }
+
+  .section-media--quad .section-media__item:hover .section-media__img {
     transform: none;
   }
 }
