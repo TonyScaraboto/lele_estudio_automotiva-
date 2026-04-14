@@ -1,15 +1,13 @@
-(function () {
-  var chips = document.querySelectorAll(".topbar__link[data-category]");
-  var categories = document.querySelectorAll(".menu-category[data-category]");
+var chips = document.querySelectorAll(".topbar__link[data-category]");
+var categories = document.querySelectorAll(".menu-category[data-category]");
 
-  function setActive(cat) {
-    chips.forEach(function (chip) {
-      chip.classList.toggle("is-active", chip.getAttribute("data-category") === cat);
-    });
-  }
+function setActive(cat) {
+  chips.forEach(function (chip) {
+    chip.classList.toggle("is-active", chip.getAttribute("data-category") === cat);
+  });
+}
 
-  if (!categories.length || !chips.length) return;
-
+if (categories.length && chips.length) {
   var observer = new IntersectionObserver(
     function (entries) {
       var visible = entries
@@ -47,4 +45,4 @@
 
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
-})();
+}
