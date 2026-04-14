@@ -568,28 +568,6 @@ body {
   min-height: 35vh;
 }
 
-.menu-readme {
-  margin: 0 0 clamp(1.5rem, 3.5vw, 2rem);
-  padding: 1rem 1.15rem 1.05rem;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(252, 165, 165, 0.2);
-  border-left: 3px solid rgba(240, 68, 56, 0.65);
-  background: rgba(240, 68, 56, 0.07);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2) inset;
-}
-
-.menu-readme__text {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: rgba(244, 244, 245, 0.88);
-}
-
-.menu-readme__text strong {
-  color: #fafafa;
-  font-weight: 700;
-}
-
 .menu-category {
   scroll-margin-top: 5.75rem;
   padding: clamp(1.75rem, 4vw, 2.5rem) 0 clamp(2.25rem, 5.5vw, 3.5rem);
@@ -1193,16 +1171,6 @@ a.menu-card:focus-visible {
     padding-left: max(0.85rem, env(safe-area-inset-left, 0px));
     padding-right: max(0.85rem, env(safe-area-inset-right, 0px));
     padding-top: clamp(1.35rem, 4vw, 1.85rem);
-  }
-
-  .menu-readme {
-    padding: 0.85rem 0.95rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .menu-readme__text {
-    font-size: 0.875rem;
-    line-height: 1.6;
   }
 
   .menu-category {
