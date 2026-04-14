@@ -75,7 +75,7 @@ if (categories.length && chips.length) {
 
   function scrollNext(strip, useSmooth) {
     var max = strip.scrollWidth - strip.clientWidth;
-    if (max <= 4) return;
+    if (max < 1) return;
     var step = cardStep(strip);
     if (step < 8) {
       step = strip.clientWidth + gapPx(strip);
@@ -158,23 +158,17 @@ if (categories.length && chips.length) {
     );
     io.observe(quad);
 
-    strip.addEventListener("mouseenter", function () {
+    /* Pausa com o rato sobre a galeria inteira (strip + botão); sem pointerdown/up — evita ficar pausado
+       se o utilizador largar o rato fora da faixa (pointerup não chega ao strip). */
+    quad.addEventListener("mouseenter", function () {
       paused = true;
       clearTimer();
     });
-    strip.addEventListener("mouseleave", function () {
+    quad.addEventListener("mouseleave", function () {
       paused = false;
       if (inView && mq.matches) startTimer();
     });
-    strip.addEventListener("pointerdown", function () {
-      paused = true;
-      clearTimer();
-    });
-    strip.addEventListener("pointerup", function () {
-      paused = false;
-      if (inView && mq.matches) startTimer();
-    });
-    strip.addEventListener(
+    quad.addEventListener(
       "wheel",
       function () {
         pauseThenResume(3200);
@@ -223,6 +217,19 @@ if (categories.length && chips.length) {
     );
 
     setTabindex();
+
+    /* Garante arranque após layout (scrollWidth fiável) se o IO já tiver disparado cedo demais */
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        if (!mq.matches || document.visibilityState !== "visible") return;
+        var r = quad.getBoundingClientRect();
+        var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+        if (r.top < vh && r.bottom > 0) {
+          inView = true;
+          if (!paused) startTimer();
+        }
+      });
+    });
   }
 
   quads.forEach(attach);
