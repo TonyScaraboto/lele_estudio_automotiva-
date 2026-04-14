@@ -106,7 +106,7 @@ if (categories.length && chips.length) {
     var timer = null;
     var paused = false;
     var inView = false;
-    var intervalMs = 1000;
+    var intervalMs = 1500;
 
     function clearTimer() {
       if (timer) {
