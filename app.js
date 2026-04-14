@@ -77,6 +77,9 @@ if (categories.length && chips.length) {
     var max = strip.scrollWidth - strip.clientWidth;
     if (max <= 4) return;
     var step = cardStep(strip);
+    if (step < 8) {
+      step = strip.clientWidth + gapPx(strip);
+    }
     if (step < 8) return;
     var next = strip.scrollLeft + step;
     var behavior = reduce.matches || !useSmooth ? "auto" : "smooth";
@@ -89,6 +92,9 @@ if (categories.length && chips.length) {
 
   function scrollPrev(strip) {
     var step = cardStep(strip);
+    if (step < 8) {
+      step = strip.clientWidth + gapPx(strip);
+    }
     if (step < 8) return;
     var prev = Math.max(0, strip.scrollLeft - step);
     strip.scrollTo({ left: prev, behavior: reduce.matches ? "auto" : "smooth" });
@@ -110,13 +116,13 @@ if (categories.length && chips.length) {
     }
 
     function tick() {
-      if (!mq.matches || reduce.matches || paused || !inView || document.visibilityState !== "visible") return;
+      if (!mq.matches || paused || !inView || document.visibilityState !== "visible") return;
       scrollNext(strip, false);
     }
 
     function startTimer() {
       clearTimer();
-      if (!mq.matches || reduce.matches || !inView || document.visibilityState !== "visible") return;
+      if (!mq.matches || !inView || document.visibilityState !== "visible") return;
       timer = setInterval(tick, intervalMs);
     }
 
@@ -126,7 +132,7 @@ if (categories.length && chips.length) {
       window.clearTimeout(strip._carouselPauseT);
       strip._carouselPauseT = window.setTimeout(function () {
         paused = false;
-        if (inView && mq.matches && !reduce.matches) startTimer();
+        if (inView && mq.matches) startTimer();
       }, ms);
     }
 
@@ -145,10 +151,10 @@ if (categories.length && chips.length) {
         entries.forEach(function (entry) {
           inView = entry.isIntersecting;
           clearTimer();
-          if (inView && mq.matches && !reduce.matches) startTimer();
+          if (inView && mq.matches) startTimer();
         });
       },
-      { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      { root: null, rootMargin: "0px", threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] }
     );
     io.observe(quad);
 
@@ -158,7 +164,7 @@ if (categories.length && chips.length) {
     });
     strip.addEventListener("mouseleave", function () {
       paused = false;
-      if (inView && mq.matches && !reduce.matches) startTimer();
+      if (inView && mq.matches) startTimer();
     });
     strip.addEventListener("pointerdown", function () {
       paused = true;
@@ -166,7 +172,7 @@ if (categories.length && chips.length) {
     });
     strip.addEventListener("pointerup", function () {
       paused = false;
-      if (inView && mq.matches && !reduce.matches) startTimer();
+      if (inView && mq.matches) startTimer();
     });
     strip.addEventListener(
       "wheel",
@@ -197,21 +203,21 @@ if (categories.length && chips.length) {
     function onMqOrReduce() {
       setTabindex();
       clearTimer();
-      if (inView && mq.matches && !reduce.matches) startTimer();
+      if (inView && mq.matches) startTimer();
     }
 
     mq.addEventListener("change", onMqOrReduce);
     reduce.addEventListener("change", onMqOrReduce);
     document.addEventListener("visibilitychange", function () {
       if (document.visibilityState === "hidden") clearTimer();
-      else if (inView && mq.matches && !reduce.matches) startTimer();
+      else if (inView && mq.matches) startTimer();
     });
 
     window.addEventListener(
       "resize",
       function () {
         clearTimer();
-        if (inView && mq.matches && !reduce.matches) startTimer();
+        if (inView && mq.matches) startTimer();
       },
       { passive: true }
     );
