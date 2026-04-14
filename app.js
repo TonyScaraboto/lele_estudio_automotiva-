@@ -47,7 +47,7 @@ if (categories.length && chips.length) {
   onScroll();
 }
 
-/* Carrossel desktop: .section-media--quad (≥960px). Abaixo de 960px mantém-se só a grelha. */
+/* Carrossel desktop: faixa rolável .section-media__strip dentro de .section-media--quad (≥960px). */
 (function () {
   var mq = window.matchMedia("(min-width: 960px)");
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -67,34 +67,36 @@ if (categories.length && chips.length) {
     return 16;
   }
 
-  function cardStep(el) {
-    var first = el.querySelector(".section-media__item");
+  function cardStep(strip) {
+    var first = strip.querySelector(".section-media__item");
     if (!first) return 0;
-    return first.offsetWidth + gapPx(el);
+    return first.offsetWidth + gapPx(strip);
   }
 
-  function scrollNext(el) {
-    var max = el.scrollWidth - el.clientWidth;
+  function scrollNext(strip) {
+    var max = strip.scrollWidth - strip.clientWidth;
     if (max <= 4) return;
-    var step = cardStep(el);
+    var step = cardStep(strip);
     if (step < 8) return;
-    var next = el.scrollLeft + step * 0.98;
+    var next = strip.scrollLeft + step * 0.98;
     var behavior = reduce.matches ? "auto" : "smooth";
     if (next >= max - 2) {
-      el.scrollTo({ left: 0, behavior: behavior });
+      strip.scrollTo({ left: 0, behavior: behavior });
     } else {
-      el.scrollTo({ left: next, behavior: behavior });
+      strip.scrollTo({ left: next, behavior: behavior });
     }
   }
 
-  function scrollPrev(el) {
-    var step = cardStep(el);
+  function scrollPrev(strip) {
+    var step = cardStep(strip);
     if (step < 8) return;
-    var prev = Math.max(0, el.scrollLeft - step * 0.98);
-    el.scrollTo({ left: prev, behavior: reduce.matches ? "auto" : "smooth" });
+    var prev = Math.max(0, strip.scrollLeft - step * 0.98);
+    strip.scrollTo({ left: prev, behavior: reduce.matches ? "auto" : "smooth" });
   }
 
-  function attach(el) {
+  function attach(quad) {
+    var strip = quad.querySelector(".section-media__strip") || quad;
+    var nextBtn = quad.querySelector(".section-media__next");
     var timer = null;
     var paused = false;
     var inView = false;
@@ -109,7 +111,7 @@ if (categories.length && chips.length) {
 
     function tick() {
       if (!mq.matches || reduce.matches || paused || !inView || document.visibilityState !== "visible") return;
-      scrollNext(el);
+      scrollNext(strip);
     }
 
     function startTimer() {
@@ -118,13 +120,23 @@ if (categories.length && chips.length) {
       timer = setInterval(tick, intervalMs);
     }
 
+    function pauseThenResume(ms) {
+      paused = true;
+      clearTimer();
+      window.clearTimeout(strip._carouselPauseT);
+      strip._carouselPauseT = window.setTimeout(function () {
+        paused = false;
+        if (inView && mq.matches && !reduce.matches) startTimer();
+      }, ms);
+    }
+
     function setTabindex() {
       if (mq.matches) {
-        el.setAttribute("tabindex", "0");
-        el.setAttribute("data-carousel-desktop", "");
+        strip.setAttribute("tabindex", "0");
+        strip.setAttribute("data-carousel-desktop", "");
       } else {
-        el.removeAttribute("tabindex");
-        el.removeAttribute("data-carousel-desktop");
+        strip.removeAttribute("tabindex");
+        strip.removeAttribute("data-carousel-desktop");
       }
     }
 
@@ -138,48 +150,49 @@ if (categories.length && chips.length) {
       },
       { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
     );
-    io.observe(el);
+    io.observe(quad);
 
-    el.addEventListener("mouseenter", function () {
+    strip.addEventListener("mouseenter", function () {
       paused = true;
       clearTimer();
     });
-    el.addEventListener("mouseleave", function () {
+    strip.addEventListener("mouseleave", function () {
       paused = false;
       if (inView && mq.matches && !reduce.matches) startTimer();
     });
-    el.addEventListener("pointerdown", function () {
+    strip.addEventListener("pointerdown", function () {
       paused = true;
       clearTimer();
     });
-    el.addEventListener("pointerup", function () {
+    strip.addEventListener("pointerup", function () {
       paused = false;
       if (inView && mq.matches && !reduce.matches) startTimer();
     });
-    el.addEventListener(
+    strip.addEventListener(
       "wheel",
       function () {
-        paused = true;
-        clearTimer();
-        window.clearTimeout(el._carouselWheelT);
-        el._carouselWheelT = window.setTimeout(function () {
-          paused = false;
-          if (inView && mq.matches && !reduce.matches) startTimer();
-        }, 3200);
+        pauseThenResume(3200);
       },
       { passive: true }
     );
 
-    el.addEventListener("keydown", function (e) {
+    strip.addEventListener("keydown", function (e) {
       if (!mq.matches) return;
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        scrollNext(el);
+        scrollNext(strip);
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
-        scrollPrev(el);
+        scrollPrev(strip);
       }
     });
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        scrollNext(strip);
+        pauseThenResume(intervalMs);
+      });
+    }
 
     function onMqOrReduce() {
       setTabindex();

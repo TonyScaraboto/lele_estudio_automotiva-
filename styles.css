@@ -490,14 +490,32 @@ body {
   }
 }
 
-/* ≥960px: carrossel estilo Netflix + destaque no hover; viewport abaixo de 960px inalterado */
+/* Mobile/tablet: strip “invisível” na grelha — figuras contam como filhas de .section-media--quad */
+.section-media--quad .section-media__strip {
+  display: contents;
+}
+
+.section-media__next {
+  display: none;
+}
+
+/* ≥960px: faixa rolável tipo Netflix (cartões verticais + botão); abaixo de 960px inalterado */
 @media (min-width: 960px) {
   .section-media--quad {
     container-type: inline-size;
     container-name: media-strip;
+    display: block;
+    position: relative;
+    margin-left: calc(-1 * var(--page-pad));
+    margin-right: calc(-1 * var(--page-pad));
+    padding-top: 0.35rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .section-media--quad .section-media__strip {
     display: flex;
     flex-wrap: nowrap;
-    gap: 1.2rem;
+    gap: 1.15rem;
     overflow-x: auto;
     overflow-y: visible;
     overscroll-behavior-x: contain;
@@ -506,39 +524,69 @@ body {
     scroll-padding-block: 0.35rem;
     padding-top: 1rem;
     padding-bottom: 1.35rem;
-    margin-left: calc(-1 * var(--page-pad));
-    margin-right: calc(-1 * var(--page-pad));
     padding-left: var(--page-pad);
-    padding-right: var(--page-pad);
+    padding-right: clamp(3rem, 7vw, 4.25rem);
+    margin: 0;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
     cursor: grab;
   }
 
-  .section-media--quad:active {
+  .section-media--quad .section-media__strip:active {
     cursor: grabbing;
   }
 
-  .section-media--quad:focus-visible {
+  .section-media--quad .section-media__strip:focus-visible {
     outline: 2px solid rgba(252, 165, 165, 0.45);
     outline-offset: 4px;
     border-radius: var(--radius-md);
   }
 
-  .section-media--quad::-webkit-scrollbar {
+  .section-media--quad .section-media__strip::-webkit-scrollbar {
     height: 6px;
   }
 
-  .section-media--quad::-webkit-scrollbar-thumb {
+  .section-media--quad .section-media__strip::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 999px;
   }
 
-  /* ~3 cartões + peek; cartão em destaque ao hover (tipo Netflix) */
+  .section-media__next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: 0.35rem;
+    bottom: 1.6rem;
+    width: clamp(2.75rem, 5vw, 3.5rem);
+    margin: 0;
+    padding: 0;
+    z-index: 8;
+    border: none;
+    border-radius: 10px 0 0 10px;
+    cursor: pointer;
+    color: #fafafa;
+    background: linear-gradient(90deg, rgba(9, 9, 11, 0) 0%, rgba(9, 9, 11, 0.55) 28%, rgba(9, 9, 11, 0.92) 55%);
+    box-shadow: -12px 0 32px rgba(0, 0, 0, 0.35);
+    transition: color 0.2s ease, filter 0.2s ease;
+  }
+
+  .section-media__next:hover {
+    color: #fff;
+    filter: brightness(1.12);
+  }
+
+  .section-media__next:focus-visible {
+    outline: 2px solid rgba(252, 165, 165, 0.55);
+    outline-offset: 2px;
+  }
+
+  /* Cartões tipo poster (vertical), ~3 visíveis + peek */
   .section-media--quad .section-media__item {
     flex: 0 0 auto;
-    width: clamp(16.5rem, 28vw, 22rem);
-    min-width: clamp(16.5rem, 28vw, 22rem);
+    width: clamp(10.5rem, 19vw, 14.5rem);
+    min-width: clamp(10.5rem, 19vw, 14.5rem);
     scroll-snap-align: start;
     scroll-snap-stop: always;
     position: relative;
@@ -553,7 +601,8 @@ body {
   }
 
   .section-media--quad .section-media__img {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 4;
+    border-radius: calc(var(--radius-lg) + 2px);
     transition: box-shadow 0.38s var(--ease-out-soft), outline-color 0.3s ease, transform 0.38s var(--ease-out-soft);
   }
 
@@ -570,8 +619,8 @@ body {
 @supports (width: 1cqw) {
   @media (min-width: 960px) {
     .section-media--quad .section-media__item {
-      width: clamp(16.5rem, 31cqw, 22rem);
-      min-width: clamp(16.5rem, 31cqw, 22rem);
+      width: clamp(10.5rem, 24cqw, 15rem);
+      min-width: clamp(10.5rem, 24cqw, 15rem);
     }
   }
 }
