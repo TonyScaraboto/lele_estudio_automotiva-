@@ -73,13 +73,13 @@ if (categories.length && chips.length) {
     return first.offsetWidth + gapPx(strip);
   }
 
-  function scrollNext(strip) {
+  function scrollNext(strip, useSmooth) {
     var max = strip.scrollWidth - strip.clientWidth;
     if (max <= 4) return;
     var step = cardStep(strip);
     if (step < 8) return;
     var next = strip.scrollLeft + step;
-    var behavior = reduce.matches ? "auto" : "smooth";
+    var behavior = reduce.matches || !useSmooth ? "auto" : "smooth";
     if (next >= max - 2) {
       strip.scrollTo({ left: 0, behavior: behavior });
     } else {
@@ -100,7 +100,7 @@ if (categories.length && chips.length) {
     var timer = null;
     var paused = false;
     var inView = false;
-    var intervalMs = 4200;
+    var intervalMs = 1000;
 
     function clearTimer() {
       if (timer) {
@@ -111,7 +111,7 @@ if (categories.length && chips.length) {
 
     function tick() {
       if (!mq.matches || reduce.matches || paused || !inView || document.visibilityState !== "visible") return;
-      scrollNext(strip);
+      scrollNext(strip, false);
     }
 
     function startTimer() {
@@ -180,7 +180,7 @@ if (categories.length && chips.length) {
       if (!mq.matches) return;
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        scrollNext(strip);
+        scrollNext(strip, true);
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
         scrollPrev(strip);
@@ -189,8 +189,8 @@ if (categories.length && chips.length) {
 
     if (nextBtn) {
       nextBtn.addEventListener("click", function () {
-        scrollNext(strip);
-        pauseThenResume(intervalMs);
+        scrollNext(strip, true);
+        pauseThenResume(3500);
       });
     }
 
