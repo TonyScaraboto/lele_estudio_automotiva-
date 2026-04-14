@@ -490,9 +490,46 @@ body {
   }
 }
 
+/* ≥960px: carrossel horizontal (substitui 4 colunas; cartões com largura mínima para haver overflow) */
 @media (min-width: 960px) {
   .section-media--quad {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-pad);
+    padding-bottom: 0.65rem;
+    margin-left: calc(-1 * var(--page-pad));
+    margin-right: calc(-1 * var(--page-pad));
+    padding-left: var(--page-pad);
+    padding-right: var(--page-pad);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  }
+
+  .section-media--quad::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .section-media--quad::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+  }
+
+  .section-media--quad .section-media__item {
+    flex: 0 0 auto;
+    width: clamp(16rem, 26vw, 22.5rem);
+    min-width: clamp(16rem, 26vw, 22.5rem);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .section-media--quad .section-media__img {
+    aspect-ratio: 4 / 3;
+    min-height: 11.5rem;
   }
 }
 
@@ -1432,41 +1469,6 @@ a.menu-card:focus-visible {
     margin-bottom: clamp(2.1rem, 2.8vw, 2.85rem);
   }
 
-  /* Carrossel horizontal só no desktop (grelha mantém-se em ≤900px e no mobile) */
-  .section-media--quad {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1rem;
-    overflow-x: auto;
-    overflow-y: visible;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--page-pad);
-    padding-bottom: 0.6rem;
-    margin-left: calc(-1 * var(--page-pad));
-    margin-right: calc(-1 * var(--page-pad));
-    padding-left: var(--page-pad);
-    padding-right: var(--page-pad);
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
-  }
-
-  .section-media--quad::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .section-media--quad::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 999px;
-  }
-
-  .section-media--quad .section-media__item {
-    flex: 0 0 clamp(14rem, 30vw, 18.5rem);
-    min-width: 0;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-
   .section-media__img {
     border-radius: calc(var(--radius-lg) + 2px);
   }
@@ -1475,13 +1477,28 @@ a.menu-card:focus-visible {
     border-radius: calc(var(--radius-lg) + 2px);
   }
 
+  /* Cartões de serviço — faixa de foto e corpo um pouco maiores (só ≥901px) */
+  .menu-card__img {
+    aspect-ratio: 16 / 8.75;
+    min-height: 11.25rem;
+  }
+
+  .menu-card__media--compact .menu-card__img {
+    aspect-ratio: 2 / 1;
+    max-height: clamp(10rem, 16vw, 12.25rem);
+  }
+
   .menu-card__inner {
-    padding: clamp(1.25rem, 2vw, 1.6rem) clamp(1.2rem, 2vw, 1.55rem) clamp(1.4rem, 2.2vw, 1.7rem);
-    padding-left: clamp(1.1rem, 1.8vw, 1.4rem);
+    padding: clamp(1.3rem, 2.1vw, 1.7rem) clamp(1.25rem, 2vw, 1.65rem) clamp(1.45rem, 2.2vw, 1.85rem);
+    padding-left: clamp(1.15rem, 1.8vw, 1.45rem);
   }
 
   .menu-card--compact .menu-card__inner {
-    padding: 1.05rem 1.05rem 1.15rem 1rem;
+    padding: 1.1rem 1.1rem 1.2rem 1.05rem;
+  }
+
+  .card-grid--compact {
+    max-width: 48rem;
   }
 
   .price-tag {
