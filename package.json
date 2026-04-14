@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "verify:public": "node scripts/verify-public-assets.mjs",
+    "build": "npm run verify:public && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
